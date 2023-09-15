@@ -116,9 +116,7 @@ internal static class Example31_CustomPlanner
     {
         string folder = RepoFiles.SampleSkillsPath();
         kernel.ImportSkill(new TimeSkill(), "time");
-#pragma warning disable CA2000 // Dispose objects before losing scope
         var bing = new WebSearchEngineSkill(new BingConnector(TestConfiguration.Bing.ApiKey));
-#pragma warning restore CA2000 // Dispose objects before losing scope
         var search = kernel.ImportSkill(bing, "bing");
 
         return kernel.ImportSemanticSkillFromDirectory(folder, "QASkill");

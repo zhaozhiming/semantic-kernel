@@ -153,6 +153,12 @@ public static class Example15_TextMemorySkill
         // store and retrieve memories.
         using SemanticTextMemory textMemory = new(memoryStore, embeddingGenerator);
 
+        var info1 = Guid.NewGuid().ToString();
+        var info2 = Guid.NewGuid().ToString();
+        var info3 = Guid.NewGuid().ToString();
+        var info4 = Guid.NewGuid().ToString();
+        var info5 = Guid.NewGuid().ToString();
+
         /////////////////////////////////////////////////////////////////////////////////////////////////////
         // PART 1: Store and retrieve memories using the ISemanticTextMemory (textMemory) object.
         //
@@ -160,22 +166,22 @@ public static class Example15_TextMemorySkill
         /////////////////////////////////////////////////////////////////////////////////////////////////////
         Console.WriteLine("== PART 1a: Saving Memories through the ISemanticTextMemory object ==");
 
-        Console.WriteLine("Saving memory with key 'info1': \"My name is Andrea\"");
-        await textMemory.SaveInformationAsync(MemoryCollectionName, id: "info1", text: "My name is Andrea", cancellationToken: cancellationToken);
+        Console.WriteLine($"Saving memory with key '{info1}': \"My name is Andrea\"");
+        await textMemory.SaveInformationAsync(MemoryCollectionName, id: info1, text: "My name is Andrea", cancellationToken: cancellationToken);
 
-        Console.WriteLine("Saving memory with key 'info2': \"I work as a tourist operator\"");
-        await textMemory.SaveInformationAsync(MemoryCollectionName, id: "info2", text: "I work as a tourist operator", cancellationToken: cancellationToken);
+        Console.WriteLine($"Saving memory with key '{info2}': \"I work as a tourist operator\"");
+        await textMemory.SaveInformationAsync(MemoryCollectionName, id: info2, text: "I work as a tourist operator", cancellationToken: cancellationToken);
 
-        Console.WriteLine("Saving memory with key 'info3': \"I've been living in Seattle since 2005\"");
-        await textMemory.SaveInformationAsync(MemoryCollectionName, id: "info3", text: "I've been living in Seattle since 2005", cancellationToken: cancellationToken);
+        Console.WriteLine($"Saving memory with key '{info3}': \"I've been living in Seattle since 2005\"");
+        await textMemory.SaveInformationAsync(MemoryCollectionName, id: info3, text: "I've been living in Seattle since 2005", cancellationToken: cancellationToken);
 
-        Console.WriteLine("Saving memory with key 'info4': \"I visited France and Italy five times since 2015\"");
-        await textMemory.SaveInformationAsync(MemoryCollectionName, id: "info4", text: "I visited France and Italy five times since 2015", cancellationToken: cancellationToken);
+        Console.WriteLine($"Saving memory with key '{info4}': \"I visited France and Italy five times since 2015\"");
+        await textMemory.SaveInformationAsync(MemoryCollectionName, id: info4, text: "I visited France and Italy five times since 2015", cancellationToken: cancellationToken);
 
         // Retrieve a memory
         Console.WriteLine("== PART 1b: Retrieving Memories through the ISemanticTextMemory object ==");
-        MemoryQueryResult? lookup = await textMemory.GetAsync(MemoryCollectionName, "info1", cancellationToken: cancellationToken);
-        Console.WriteLine("Memory with key 'info1':" + lookup?.Metadata.Text ?? "ERROR: memory not found");
+        MemoryQueryResult? lookup = await textMemory.GetAsync(MemoryCollectionName, info1, cancellationToken: cancellationToken);
+        Console.WriteLine($"Memory with key '{info1}':" + lookup?.Metadata.Text ?? "ERROR: memory not found");
         Console.WriteLine();
 
         /////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -191,11 +197,11 @@ public static class Example15_TextMemorySkill
         var memoryFunctions = kernel.ImportSkill(memorySkill);
 
         // Save a memory with the Kernel
-        Console.WriteLine("Saving memory with key 'info5': \"My family is from New York\"");
+        Console.WriteLine($"Saving memory with key '{info5}': \"My family is from New York\"");
         await kernel.RunAsync(memoryFunctions["Save"], new()
         {
             [TextMemorySkill.CollectionParam] = MemoryCollectionName,
-            [TextMemorySkill.KeyParam] = "info5",
+            [TextMemorySkill.KeyParam] = info5,
             ["input"] = "My family is from New York"
         }, cancellationToken);
 
@@ -204,10 +210,10 @@ public static class Example15_TextMemorySkill
         var result = await kernel.RunAsync(memoryFunctions["Retrieve"], new()
         {
             [TextMemorySkill.CollectionParam] = MemoryCollectionName,
-            [TextMemorySkill.KeyParam] = "info5"
+            [TextMemorySkill.KeyParam] = info5
         }, cancellationToken);
 
-        Console.WriteLine("Memory with key 'info5':" + result?.ToString() ?? "ERROR: memory not found");
+        Console.WriteLine($"Memory with key '{info5}':" + result?.ToString() ?? "ERROR: memory not found");
         Console.WriteLine();
 
         /////////////////////////////////////////////////////////////////////////////////////////////////////
